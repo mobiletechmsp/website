@@ -1,0 +1,736 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <link rel="icon" href="data:," />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@500;600&display=swap" rel="stylesheet">
+  <title>Mobi — Simple IT Help</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --page: #eef3f6;
+      --surface: #ffffff;
+      --surface-soft: #f5f8fa;
+      --ink: #102235;
+      --muted: #566777;
+      --line: #d8e1e7;
+      --navy: #0c2542;
+      --navy-2: #163c65;
+      --gold: #d5a53d;
+      --gold-soft: #fff1c9;
+      --teal: #27756e;
+      --bot: #edf3f6;
+      --user: #0c2542;
+      --user-ink: #ffffff;
+      --danger: #9b3a2d;
+      --danger-soft: #fff0ed;
+      --shadow: 0 24px 60px rgba(18, 42, 61, .14);
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --radius-sm: 10px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --page: #07131f;
+        --surface: #0d1d2c;
+        --surface-soft: #122536;
+        --ink: #edf4f7;
+        --muted: #a7b6c2;
+        --line: #263d50;
+        --navy: #e7f2f7;
+        --navy-2: #8cc5eb;
+        --gold: #e1b654;
+        --gold-soft: #3a2f17;
+        --teal: #76c9bf;
+        --bot: #162b3d;
+        --user: #275d87;
+        --user-ink: #ffffff;
+        --danger: #ff9f90;
+        --danger-soft: #3a211f;
+        --shadow: 0 28px 70px rgba(0, 0, 0, .34);
+      }
+    }
+
+    * { box-sizing: border-box; }
+    html, body { min-height: 100%; }
+    body {
+      margin: 0;
+      font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+      color: var(--ink);
+      background:
+        linear-gradient(125deg, color-mix(in srgb, var(--page), var(--gold) 5%) 0%, var(--page) 42%, color-mix(in srgb, var(--page), var(--teal) 4%) 100%);
+      overflow-x: hidden;
+    }
+    button, input, a { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+
+    .page {
+      width: min(1120px, 100%);
+      min-height: 100svh;
+      margin: 0 auto;
+      padding: 42px 28px;
+      display: grid;
+      grid-template-columns: minmax(250px, 340px) minmax(480px, 680px);
+      gap: clamp(28px, 6vw, 76px);
+      align-items: center;
+      justify-content: center;
+    }
+
+    .intro { padding: 8px 0 18px; }
+    .intro h1 {
+      margin: 0 0 16px;
+      max-width: 11ch;
+      font-family: "IBM Plex Serif", Georgia, serif;
+      font-size: clamp(38px, 5vw, 64px);
+      line-height: .98;
+      letter-spacing: -.035em;
+      font-weight: 600;
+    }
+    .intro h1 span { color: var(--teal); }
+    .intro > p {
+      margin: 0;
+      max-width: 32ch;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.6;
+    }
+    .promise-list {
+      list-style: none;
+      padding: 0;
+      margin: 30px 0 0;
+      display: grid;
+      gap: 14px;
+    }
+    .promise-list li {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 11px;
+      align-items: start;
+      color: var(--ink);
+      line-height: 1.4;
+      font-size: 14px;
+    }
+    .promise-list svg { width: 22px; height: 22px; color: var(--gold); }
+    .promise-list strong { display: block; font-weight: 600; }
+    .promise-list span { color: var(--muted); display: block; margin-top: 2px; }
+
+    .chat-shell {
+      height: min(780px, calc(100svh - 56px));
+      min-height: 620px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      display: grid;
+      grid-template-rows: auto auto minmax(0, 1fr) auto;
+    }
+
+    .chat-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 18px 20px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--line);
+    }
+    .agent {
+      display: flex;
+      align-items: center;
+      min-width: 0;
+      gap: 12px;
+    }
+    .agent-mark {
+      width: 42px;
+      height: 42px;
+      flex: 0 0 auto;
+      border-radius: 12px 12px 12px 4px;
+      display: grid;
+      place-items: center;
+      color: #0c2542;
+      background: var(--gold);
+    }
+    .agent-mark svg { width: 25px; height: 25px; }
+    .agent-copy { min-width: 0; }
+    .agent-name { font-weight: 600; font-size: 16px; line-height: 1.2; }
+    .agent-status { color: var(--muted); font-size: 12px; margin-top: 4px; }
+    .agent-status::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      display: inline-block;
+      border-radius: 50%;
+      background: var(--teal);
+      margin-right: 6px;
+      vertical-align: 1px;
+    }
+    .restart {
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      padding: 8px;
+      border-radius: 9px;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+    }
+    .restart:hover { color: var(--ink); background: var(--surface-soft); }
+    .restart svg { width: 20px; height: 20px; }
+
+    .guardrail {
+      margin: 12px 18px 0;
+      padding: 10px 12px;
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      background: var(--gold-soft);
+      color: color-mix(in srgb, var(--ink), var(--gold) 16%);
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+    .guardrail svg { width: 16px; height: 16px; flex: 0 0 auto; margin-top: 1px; }
+
+    .transcript {
+      min-height: 0;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      padding: 18px 18px 10px;
+      scroll-behavior: smooth;
+    }
+    .transcript:focus-visible { outline: 2px solid var(--gold); outline-offset: -3px; }
+    .message-row { display: flex; margin: 0 0 13px; }
+    .message-row.user { justify-content: flex-end; }
+    .bubble {
+      max-width: min(84%, 500px);
+      padding: 12px 14px;
+      border-radius: 6px 16px 16px 16px;
+      background: var(--bot);
+      color: var(--ink);
+      line-height: 1.48;
+      font-size: 14.5px;
+      white-space: pre-line;
+    }
+    .user .bubble {
+      border-radius: 16px 6px 16px 16px;
+      background: var(--user);
+      color: var(--user-ink);
+    }
+    .bubble strong { font-weight: 600; }
+    .bubble a { color: inherit; }
+    .message-label {
+      margin: 0 0 5px 2px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .02em;
+    }
+    .message-stack { max-width: min(88%, 520px); }
+    .message-stack .bubble { max-width: 100%; }
+
+    .quick-replies {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 2px 0 16px;
+      padding-left: 2px;
+    }
+    .quick-reply, .action-link {
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--navy-2);
+      border-radius: 999px;
+      padding: 9px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.2;
+      cursor: pointer;
+      text-decoration: none;
+      transition: border-color .15s ease, background .15s ease, color .15s ease;
+    }
+    .quick-reply:hover { border-color: var(--teal); background: var(--surface-soft); color: var(--teal); }
+    .quick-reply:focus-visible, .action-link:focus-visible, .restart:focus-visible, .send:focus-visible, input:focus-visible {
+      outline: 3px solid color-mix(in srgb, var(--gold), transparent 35%);
+      outline-offset: 2px;
+    }
+    .action-link.primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--navy);
+      border-color: var(--navy);
+      color: var(--surface);
+      padding: 11px 15px;
+    }
+    @media (prefers-color-scheme: dark) {
+      .action-link.primary { background: var(--gold); border-color: var(--gold); color: #0b1f31; }
+    }
+    .action-link svg { width: 16px; height: 16px; }
+    .action-link.secondary { display: inline-flex; align-items: center; gap: 7px; }
+
+    .typing {
+      display: inline-flex;
+      gap: 4px;
+      align-items: center;
+      min-width: 50px;
+      height: 41px;
+    }
+    .typing i {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--muted);
+      animation: blink 1.1s infinite ease-in-out;
+    }
+    .typing i:nth-child(2) { animation-delay: .12s; }
+    .typing i:nth-child(3) { animation-delay: .24s; }
+    @keyframes blink { 0%, 60%, 100% { opacity: .3; transform: translateY(0); } 30% { opacity: 1; transform: translateY(-2px); } }
+
+    .composer {
+      border-top: 1px solid var(--line);
+      padding: 12px 14px calc(12px + env(safe-area-inset-bottom));
+      background: var(--surface);
+    }
+    .composer form {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 9px;
+      align-items: center;
+    }
+    .composer input {
+      width: 100%;
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: var(--surface-soft);
+      color: var(--ink);
+      padding: 12px 14px;
+      font-size: 14px;
+    }
+    .composer input::placeholder { color: var(--muted); }
+    .send {
+      width: 43px;
+      height: 43px;
+      border: 0;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: var(--navy);
+      color: var(--surface);
+      cursor: pointer;
+    }
+    @media (prefers-color-scheme: dark) { .send { background: var(--gold); color: #0b1f31; } }
+    .send svg { width: 19px; height: 19px; }
+    .send:disabled { opacity: .45; cursor: default; }
+    .scope-note { margin: 8px 2px 0; color: var(--muted); font-size: 11px; text-align: center; }
+
+    @media (max-width: 800px) {
+      body { background: var(--surface); }
+      .page {
+        min-height: 100svh;
+        padding: 0;
+        display: block;
+      }
+      .intro { display: none; }
+      .chat-shell {
+        width: 100%;
+        height: 100svh;
+        min-height: 520px;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+      }
+      .chat-head { padding-top: calc(14px + env(safe-area-inset-top)); }
+    }
+
+    @media (max-width: 420px) {
+      .chat-head { padding-left: 14px; padding-right: 14px; }
+      .guardrail { margin-left: 12px; margin-right: 12px; }
+      .transcript { padding-left: 12px; padding-right: 12px; }
+      .bubble { max-width: 90%; }
+      .message-stack { max-width: 94%; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="intro" aria-labelledby="page-heading">
+      <h1 id="page-heading">Simple IT help. <span>A real person when you need one.</span></h1>
+      <p>Work through a few safe first steps, learn how MobileTech MSP can help, or schedule a conversation.</p>
+      <ul class="promise-list" aria-label="What Mobi can help with">
+        <li>
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12.5 9 17l11-11"/></svg>
+          <div><strong>Plain-language guidance</strong><span>One small step at a time.</span></div>
+        </li>
+        <li>
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 5 6v5c0 4.5 2.6 8 7 10 4.4-2 7-5.5 7-10V6l-7-3Z"/><path d="m9.5 12 1.6 1.6 3.7-4"/></svg>
+          <div><strong>Security-minded</strong><span>No passwords, codes, or payment details.</span></div>
+        </li>
+        <li>
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 3v3M17 3v3M4 9h16M5 5h14a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z"/></svg>
+          <div><strong>Easy handoff</strong><span>Schedule help when the quick fix is not enough.</span></div>
+        </li>
+      </ul>
+    </section>
+
+    <section class="chat-shell" aria-label="Mobi IT support chat">
+      <header class="chat-head">
+        <div class="agent">
+          <div class="agent-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="7" width="14" height="11" rx="3"/><path d="M12 3v4M9 12h.01M15 12h.01M9 15h6"/></svg>
+          </div>
+          <div class="agent-copy">
+            <div class="agent-name">IT help</div>
+            <div class="agent-status">Mobi is ready</div>
+          </div>
+        </div>
+        <button class="restart" type="button" id="restart" aria-label="Start the conversation over" title="Start over">
+          <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4v6h6"/><path d="M5.6 16a8 8 0 1 0 .4-9.4L4 10"/></svg>
+        </button>
+      </header>
+
+      <div class="guardrail">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3 5 6v5c0 4.5 2.6 8 7 10 4.4-2 7-5.5 7-10V6l-7-3Z"/></svg>
+        <span>Please don’t share passwords, MFA codes, Social Security numbers, payment details, security keys, or remote-access credentials.</span>
+      </div>
+
+      <div class="transcript" id="transcript" tabindex="0" aria-live="polite" aria-label="Conversation"></div>
+
+      <footer class="composer">
+        <form id="chat-form">
+          <input id="message" aria-label="Describe what you need help with" autocomplete="off" maxlength="240" placeholder="Describe the issue in a few words…" />
+          <button class="send" id="send" type="submit" aria-label="Send message">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m4 4 16 8-16 8 3-8-3-8Z"/><path d="M7 12h13"/></svg>
+          </button>
+        </form>
+        <p class="scope-note">Quick guidance only — Mobi won’t request access to your device.</p>
+      </footer>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      "use strict";
+
+      var transcript = document.getElementById("transcript");
+      var form = document.getElementById("chat-form");
+      var input = document.getElementById("message");
+      var restart = document.getElementById("restart");
+      var busy = false;
+      var activeFlow = null;
+      var stepIndex = 0;
+
+      var calendarUrl = "https://calendly.com/mobiletechmsp-info/new-meeting";
+      var phoneUrl = "tel:+13864019691";
+
+      var flows = {
+        wifi: {
+          title: "Let’s narrow down the internet or Wi-Fi issue.",
+          steps: [
+            "First, check another device on the same network. If only one device is affected, turn Wi-Fi off on that device, wait 10 seconds, then reconnect.",
+            "If every device is offline, check the modem and router for power or warning lights. Make sure the cables are seated firmly — but don’t press a reset button.",
+            "For an unmanaged setup, unplug the modem and router from power for 60 seconds. Plug the modem in first, wait for it to come online, then reconnect the router. If your network is managed, skip this step and schedule help."
+          ]
+        },
+        slow: {
+          title: "Let’s start with the safest fixes for a slow or frozen computer.",
+          steps: [
+            "Save anything you can, close programs you are not using, then restart the computer. A full restart clears more than simply closing the lid.",
+            "After restart, check whether storage is nearly full. Remove only files you recognize, empty the recycle bin, and avoid pop-up ‘cleanup’ tools.",
+            "Run updates from the computer’s built-in Settings app, then restart once more. If slowness returns quickly or you hear unusual noises, stop there and schedule help."
+          ]
+        },
+        email: {
+          title: "Let’s find out whether the email problem is the app or the account.",
+          steps: [
+            "Open your email provider’s official webmail page in a browser. If mail works there, the issue is likely limited to the email app.",
+            "Check the internet connection, then fully close and reopen the email app. Look for a clear storage-full or sign-in message — but don’t share the message if it contains a code.",
+            "Restart the device and test again. Avoid removing and re-adding the account unless you know the sign-in details and recovery options are current."
+          ]
+        },
+        printer: {
+          title: "Let’s clear the usual printer roadblocks.",
+          steps: [
+            "Check the printer screen for a paper, ink, toner, door, or connection warning. Confirm it is powered on and has paper.",
+            "On the computer, make sure the correct printer is selected. Open the print queue, cancel stuck jobs, then try one simple page.",
+            "Turn the printer off for 30 seconds, turn it back on, and restart the computer. Don’t factory-reset the printer; that can erase network settings."
+          ]
+        },
+        security: {
+          title: "Treat this as a possible security issue.",
+          danger: true,
+          steps: [
+            "Don’t click, reply, download, call a number in the message, or enter any information. If it is only a suspicious email or text, close it and use the app’s Report phishing or Report junk option.",
+            "If you clicked, entered information, or the computer is behaving unexpectedly, disconnect Wi-Fi or unplug the network cable. Don’t install a tool suggested by the pop-up or caller.",
+            "Use a different, trusted device to contact MobileTech MSP. If you entered a password, change it from that trusted device and review MFA — never send the password or code here."
+          ]
+        }
+      };
+
+      function scrollToEnd() {
+        window.requestAnimationFrame(function () {
+          transcript.scrollTop = transcript.scrollHeight;
+        });
+      }
+
+      function clearReplies() {
+        var groups = transcript.querySelectorAll(".quick-replies");
+        groups.forEach(function (group) { group.remove(); });
+      }
+
+      function makeMessage(role, text, label) {
+        var row = document.createElement("div");
+        row.className = "message-row " + role;
+        var stack = document.createElement("div");
+        stack.className = "message-stack";
+        if (label) {
+          var tag = document.createElement("div");
+          tag.className = "message-label";
+          tag.textContent = label;
+          stack.appendChild(tag);
+        }
+        var bubble = document.createElement("div");
+        bubble.className = "bubble";
+        bubble.textContent = text;
+        stack.appendChild(bubble);
+        row.appendChild(stack);
+        transcript.appendChild(row);
+        scrollToEnd();
+        return stack;
+      }
+
+      function addReplies(items, stack) {
+        var group = document.createElement("div");
+        group.className = "quick-replies";
+        items.forEach(function (item) {
+          if (item.href) {
+            var link = document.createElement("a");
+            link.className = "action-link " + (item.primary ? "primary" : "secondary");
+            link.href = item.href;
+            link.target = item.href.indexOf("http") === 0 ? "_blank" : "_self";
+            if (link.target === "_blank") link.rel = "noopener noreferrer";
+            link.textContent = item.label;
+            if (item.icon === "calendar") {
+              link.insertAdjacentHTML("afterbegin", '<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 3v3M17 3v3M4 9h16M5 5h14a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z"/><path d="m9 14 2 2 4-4"/></svg>');
+            }
+            if (item.icon === "phone") {
+              link.insertAdjacentHTML("afterbegin", '<svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6.6 3h3l1.5 4-2 1.5a16 16 0 0 0 6.4 6.4l1.5-2 4 1.5v3c0 1.1-.9 2-2 2C10.2 19.4 4.6 13.8 4.6 7c0-1.1.9-2 2-2Z"/></svg>');
+            }
+            group.appendChild(link);
+          } else {
+            var button = document.createElement("button");
+            button.type = "button";
+            button.className = "quick-reply";
+            button.textContent = item.label;
+            button.addEventListener("click", function () {
+              if (busy) return;
+              handleChoice(item.label, item.action);
+            });
+            group.appendChild(button);
+          }
+        });
+        (stack || transcript).appendChild(group);
+        scrollToEnd();
+      }
+
+      function showTyping(callback) {
+        busy = true;
+        var row = document.createElement("div");
+        row.className = "message-row bot";
+        var bubble = document.createElement("div");
+        bubble.className = "bubble typing";
+        bubble.setAttribute("aria-label", "Mobi is responding");
+        bubble.innerHTML = "<i></i><i></i><i></i>";
+        row.appendChild(bubble);
+        transcript.appendChild(row);
+        scrollToEnd();
+        window.setTimeout(function () {
+          row.remove();
+          busy = false;
+          callback();
+        }, 60);
+      }
+
+      function bot(text, replies) {
+        showTyping(function () {
+          var stack = makeMessage("bot", text, "Mobi");
+          if (replies && replies.length) addReplies(replies, stack);
+        });
+      }
+
+      function user(text) {
+        clearReplies();
+        makeMessage("user", text, "You");
+      }
+
+      function homeOptions() {
+        return [
+          { label: "Troubleshoot an issue", action: "troubleshoot" },
+          { label: "Services & coverage", action: "services" },
+          { label: "Schedule a conversation", action: "schedule" }
+        ];
+      }
+
+      function issueOptions() {
+        return [
+          { label: "Internet / Wi-Fi", action: "flow:wifi" },
+          { label: "Slow computer", action: "flow:slow" },
+          { label: "Email problem", action: "flow:email" },
+          { label: "Printer problem", action: "flow:printer" },
+          { label: "Suspicious message or pop-up", action: "flow:security" },
+          { label: "Something else", action: "other" }
+        ];
+      }
+
+      function start() {
+        busy = false;
+        activeFlow = null;
+        stepIndex = 0;
+        transcript.innerHTML = "";
+        var stack = makeMessage("bot", "Hi — I’m Mobi. I can walk you through a few safe IT checks, answer general questions about MobileTech MSP, or help you schedule a conversation.\n\nWhat would you like to do?", "Mobi");
+        addReplies(homeOptions(), stack);
+        input.value = "";
+      }
+
+      function startFlow(name) {
+        activeFlow = name;
+        stepIndex = 0;
+        var flow = flows[name];
+        bot(flow.title + "\n\nStep 1: " + flow.steps[0], [
+          { label: "Done — next step", action: "next" },
+          { label: "That fixed it", action: "solved" },
+          { label: "I’d rather schedule help", action: "schedule" }
+        ]);
+      }
+
+      function nextStep() {
+        var flow = flows[activeFlow];
+        stepIndex += 1;
+        if (stepIndex < flow.steps.length) {
+          var final = stepIndex === flow.steps.length - 1;
+          bot("Step " + (stepIndex + 1) + ": " + flow.steps[stepIndex], final ? [
+            { label: "That fixed it", action: "solved" },
+            { label: "Still need help", action: "stuck" }
+          ] : [
+            { label: "Done — next step", action: "next" },
+            { label: "That fixed it", action: "solved" },
+            { label: "I’d rather schedule help", action: "schedule" }
+          ]);
+        }
+      }
+
+      function scheduleMessage(preface, urgent) {
+        activeFlow = null;
+        var links = [
+          { label: "Choose a time on Calendly", href: calendarUrl, primary: true, icon: "calendar" },
+          { label: "Back to start", action: "home" }
+        ];
+        if (urgent) links.splice(1, 0, { label: "Call (386) 401-9691", href: phoneUrl, icon: "phone" });
+        bot(preface || "Choose a convenient time to talk with MobileTech MSP. Calendly will open in a new tab.", links);
+      }
+
+      function handleChoice(label, action) {
+        user(label);
+        if (action === "troubleshoot") {
+          bot("Which issue is closest to what you’re seeing?", issueOptions());
+        } else if (action.indexOf("flow:") === 0) {
+          startFlow(action.split(":")[1]);
+        } else if (action === "next") {
+          nextStep();
+        } else if (action === "solved") {
+          activeFlow = null;
+          bot("Good — I’m glad that helped. If it returns, make a note of any exact error message and what you were doing when it happened.", [
+            { label: "Ask about something else", action: "home" },
+            { label: "Schedule a conversation", action: "schedule" }
+          ]);
+        } else if (action === "stuck") {
+          var urgent = activeFlow === "security";
+          scheduleMessage(urgent ? "This one needs a person. If there may be active unauthorized access or business data at risk, call now. Otherwise, choose a time on Calendly." : "You’ve covered the safe first steps. Choose a time and MobileTech MSP can take a closer look.", urgent);
+        } else if (action === "services") {
+          bot("MobileTech MSP helps small and mid-sized businesses with managed IT, cybersecurity, Microsoft 365 and cloud services, backups and disaster recovery, networking, cabling and AV, plus one-off IT projects.\n\nService is focused across Volusia and Seminole Counties.", [
+            { label: "What kind of businesses?", action: "businesses" },
+            { label: "Schedule a conversation", action: "schedule" },
+            { label: "Back", action: "home" }
+          ]);
+        } else if (action === "businesses") {
+          bot("MobileTech MSP is built for small and mid-sized businesses that want responsive, personal support — whether the need is ongoing IT management or help with a specific project.", [
+            { label: "Schedule a conversation", action: "schedule" },
+            { label: "Back to start", action: "home" }
+          ]);
+        } else if (action === "schedule") {
+          scheduleMessage();
+        } else if (action === "other") {
+          bot("Tell me what’s happening in a few words. Please leave out names, email addresses, passwords, codes, financial details, and other private information.", [
+            { label: "Schedule help instead", action: "schedule" },
+            { label: "Back", action: "home" }
+          ]);
+          input.focus();
+        } else if (action === "home") {
+          activeFlow = null;
+          bot("What would you like help with next?", homeOptions());
+        }
+      }
+
+      function interpret(text) {
+        var value = text.toLowerCase();
+        var blocked = /(password|passcode|mfa|verification code|social security|ssn|credit card|bank account|routing number|security key|remote access code)/.test(value);
+        if (blocked) {
+          bot("For your safety, please don’t share that information here. If you already sent sensitive information to someone or entered it into a suspicious page, disconnect the affected device from the network and contact MobileTech MSP.", [
+            { label: "Security issue steps", action: "flow:security" },
+            { label: "Schedule help", action: "schedule" }
+          ]);
+          return;
+        }
+        if (/(schedule|appointment|meeting|book|calendly|talk|call me)/.test(value)) {
+          scheduleMessage();
+        } else if (/(wifi|wi-fi|internet|network|offline|online)/.test(value)) {
+          startFlow("wifi");
+        } else if (/(slow|frozen|freeze|freezing|computer|laptop|pc|mac)/.test(value)) {
+          startFlow("slow");
+        } else if (/(email|outlook|mail|inbox|send|receive)/.test(value)) {
+          startFlow("email");
+        } else if (/(printer|print|scanner|scan)/.test(value)) {
+          startFlow("printer");
+        } else if (/(phish|scam|virus|malware|hacked|hack|pop.?up|suspicious|ransom|clicked)/.test(value)) {
+          startFlow("security");
+        } else if (/(service|managed it|cybersecurity|microsoft 365|backup|cloud|cabling|av|support|what do you do)/.test(value)) {
+          bot("MobileTech MSP helps small and mid-sized businesses with managed IT, cybersecurity, Microsoft 365 and cloud services, backups and disaster recovery, networking, cabling and AV, plus one-off IT projects.", [
+            { label: "Schedule a conversation", action: "schedule" },
+            { label: "Back to start", action: "home" }
+          ]);
+        } else if (/(area|location|where|serve|county|volusia|seminole|daytona|deland|sanford|deltona|orange city)/.test(value)) {
+          bot("MobileTech MSP serves businesses across Volusia and Seminole Counties, including the Daytona Beach area, Ormond Beach, Port Orange, DeLand, DeBary, Orange City, Sanford, Deltona, and New Smyrna Beach.", [
+            { label: "Schedule a conversation", action: "schedule" },
+            { label: "Back to start", action: "home" }
+          ]);
+        } else {
+          bot("I don’t want to guess at the cause. I can guide you through common internet, computer, email, printer, and security issues — or you can schedule time with MobileTech MSP.", issueOptions().concat([{ label: "Schedule help", action: "schedule" }]));
+        }
+      }
+
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        if (busy) return;
+        var text = input.value.trim();
+        if (!text) return;
+        input.value = "";
+        user(text);
+        interpret(text);
+      });
+
+      restart.addEventListener("click", start);
+      start();
+    }());
+  </script>
+</body>
+</html>
