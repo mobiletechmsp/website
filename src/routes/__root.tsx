@@ -64,9 +64,15 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body className="grain">
         <Header />
-        <main>{children}</main>
-        <Footer />
-        <Scripts />
+<main>{children}</main>
+<Footer />
+<iframe
+  src="/mobi-chatbot.html"
+  title="Chat with Mobi"
+  style={{ width: '100%', height: '640px', border: 0, borderRadius: '16px' }}
+/>
+<Scripts />
+
       </body>
     </html>
   )
