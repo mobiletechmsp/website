@@ -12,37 +12,18 @@
  * 3. ALSO add a "Client Portal" link in the site header/nav pointing to
  *    PORTAL_URL below (https://mobiletechonsite.shield.syncromsp.com/my_profile).
  *
- * The Check-In and Booking widgets load via Syncro's includr.js scripts,
- * which inject an iframe. Scripts are appended once via useEffect.
+ * FIX 2026-10-27: Syncro's includr.js embeds use document.write, which
+ * does not render when the script is appended after page load in React
+ * (the first live deploy showed blank widget cards). The widgets below
+ * therefore load as direct iframes to the same Syncro tenant URLs
+ * (check_ins and bookings) instead of via the includr scripts.
  */
 
-import { useEffect, useRef, type RefObject } from 'react'
-
 const PORTAL_URL = 'https://mobiletechonsite.shield.syncromsp.com/my_profile'
-const CHECKIN_SCRIPT =
-  'https://mobiletechonsite.shield.syncromsp.com/check_ins/includr.js?height=800&width=1000&scrolling=no'
-const BOOKING_SCRIPT =
-  'https://mobiletechonsite.shield.syncromsp.com/bookings/includr.js?scrolling=no&height=800'
-
-function useSyncroScript(ref: RefObject<HTMLDivElement | null>, src: string) {
-  useEffect(() => {
-    const el = ref.current
-    if (!el || el.dataset.syncroLoaded) return
-    el.dataset.syncroLoaded = 'true'
-    const script = document.createElement('script')
-    script.src = src
-    script.async = true
-    el.appendChild(script)
-  }, [ref, src])
-}
+const CHECKIN_URL = 'https://mobiletechonsite.shield.syncromsp.com/check_ins'
+const BOOKING_URL = 'https://mobiletechonsite.shield.syncromsp.com/bookings'
 
 export function CustomerSupport() {
-  const checkinRef = useRef<HTMLDivElement>(null)
-  const bookingRef = useRef<HTMLDivElement>(null)
-
-  useSyncroScript(checkinRef, CHECKIN_SCRIPT)
-  useSyncroScript(bookingRef, BOOKING_SCRIPT)
-
   return (
     <section className="mx-auto max-w-6xl px-4 py-16" aria-labelledby="support-heading">
       <p className="text-sm font-semibold uppercase tracking-widest text-amber-500">
@@ -79,7 +60,14 @@ export function CustomerSupport() {
           Begin a check-in to open a new request, or look up an existing ticket with your ticket
           number and last name.
         </p>
-        <div ref={checkinRef} className="mt-4" />
+        <iframe
+          src={CHECKIN_URL}
+          title="Syncro check-in: start a ticket or check ticket status"
+          width="100%"
+          height="800"
+          scrolling="no"
+          className="mt-4 w-full border-0"
+        />
       </div>
 
       {/* Appointment Booking (Syncro embed) */}
@@ -95,7 +83,7 @@ export function CustomerSupport() {
           }}
         />
         <div className="rs-widget-container mt-4">
-          <div ref={bookingRef} />
+          <iframe src={BOOKING_URL} title="Syncro appointment booking" className="border-0" />
         </div>
       </div>
     </section>
