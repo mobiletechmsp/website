@@ -15,9 +15,9 @@ export const company = {
 }
 
 export const links = {
-  booking: 'https://outlook.office365.com/owa/calendar/MobileTechMSP@mobiletechonsite.com/bookings/',
-  ticket:
-    'mailto:support@mobiletech-msp1.odoo.com?subject=New%20Support%20Request&cc=info%40mobiletechmsp.com',
+  booking: '/support#booking',
+  ticket: '/support#check-in',
+  portal: 'https://mobiletechonsite.shield.syncromsp.com/my_profile',
   payInvoice: 'https://buy.stripe.com/8x26oHazFaHq3zzg6ufUQ00',
   action1Agent:
     'https://app.action1.com/agent/32b4c214-91f7-11ed-8961-abc5c8782b5e/Windows/agent(MobileTech_MSP).msi',
