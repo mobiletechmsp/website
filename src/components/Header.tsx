@@ -55,6 +55,14 @@ export function Header() {
                 {item.label}
               </Link>
             ))}
+            <a
+              href={links.portal}
+              target="_blank"
+              rel="noreferrer"
+              className="font-display text-sm font-semibold uppercase tracking-[0.12em] text-mist transition-colors hover:text-white"
+            >
+              Client Portal
+            </a>
           </nav>
 
           <div className="flex items-center gap-3">
@@ -90,6 +98,15 @@ export function Header() {
                 {item.label}
               </Link>
             ))}
+            <a
+              href={links.portal}
+              target="_blank"
+              rel="noreferrer"
+              onClick={() => setOpen(false)}
+              className="block border-b border-line/60 py-4 font-display text-lg font-semibold uppercase tracking-wider"
+            >
+              Client Portal
+            </a>
             <div className="mt-6 grid gap-3">
               <a href={links.booking} target="_blank" rel="noreferrer" className="cut bg-lime px-5 py-3 text-center font-display font-bold uppercase text-ink">
                 Book an assessment
