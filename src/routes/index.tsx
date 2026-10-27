@@ -16,6 +16,7 @@ import {
   Target,
 } from 'lucide-react'
 import { ContactForm } from '@/components/ContactForm'
+import { Testimonials } from '@/components/Testimonials'
 import { Eyebrow } from '@/components/Eyebrow'
 import { ServiceIcon } from '@/components/ServiceIcon'
 import { company, customers, differentiators, img, links, pillars, services } from '@/data/site'
@@ -125,7 +126,7 @@ function Hero() {
 function QuickActions() {
   const actions = [
     { icon: CalendarCheck, title: 'Schedule an assessment', body: 'Pick a time that works for you.', href: links.booking, external: true },
-    { icon: LifeBuoy, title: 'Create a support ticket', body: 'Email our helpdesk directly.', href: links.ticket },
+    { icon: LifeBuoy, title: 'Create a support ticket', body: 'Open a ticket or check its status.', href: links.ticket },
     { icon: CreditCard, title: 'Pay an invoice', body: 'Secure online payment.', href: links.payInvoice, external: true },
   ]
   return (
@@ -284,6 +285,7 @@ function Customers() {
           Proud to support local, national and small businesses — and their amazing teams.
         </h2>
       </div>
+      <Testimonials />
       <div className="relative mt-14 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
         <ul className="marquee flex w-max gap-5">
           {row.map((c, i) => (
